@@ -1,0 +1,14 @@
+name: A5_Data_Applications
+title: A5_Data_Applications
+username:
+account: eunjiii
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7853228
+bundleId: 6621067
+url: https://eunjiii.shinyapps.io/A5_Data_Applications/
+when: 1670704605.21805
+lastSyncTime: 1670704605.2181
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: co2_data.csv
