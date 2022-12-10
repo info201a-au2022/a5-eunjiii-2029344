@@ -15,10 +15,5 @@ library(shinythemes)
 source("app_server.R")
 source("app_ui.R")
 
-#co2_data <- read.csv("https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv")
-
-#write.csv(co2_data, "co2_data.csv")
-#co2_data <- read_csv("co2_data.csv")
-
 # Run the application 
 shinyApp(ui = ui, server = server)

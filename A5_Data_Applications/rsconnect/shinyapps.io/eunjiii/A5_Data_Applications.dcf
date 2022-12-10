@@ -5,10 +5,10 @@ account: eunjiii
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7853228
-bundleId: 6621067
+bundleId: 6621467
 url: https://eunjiii.shinyapps.io/A5_Data_Applications/
-when: 1670704605.21805
-lastSyncTime: 1670704605.2181
+when: 1670714772.97428
+lastSyncTime: 1670714772.9743
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: co2_data.csv

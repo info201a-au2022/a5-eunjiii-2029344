@@ -11,7 +11,17 @@ intro_page <- tabPanel(
       h1("*change*"),
     ),
     mainPanel(
-      h1("*change*"),
+      p("blah is .."),
+      uiOutput("answer1"),
+      br(),
+      p("max is .."),
+      uiOutput("answer2"),
+      br(),
+      p("min is .."),
+      uiOutput("answer3"),
+      br(),
+      p("change is .."),
+      uiOutput("answer4"),
     )
   )
 )
@@ -21,7 +31,6 @@ viz_page <- tabPanel(
   titlePanel(strong("Interactive Visualization")),
   sidebarLayout(
     sidebarPanel(
-      h1("*change*"),
       selectInput("select", label = h3("Select Countries"), 
                   choices = list("United States" = 1, "United Kingdom" = 2, "China" = 3), 
                   selected = 1),
