@@ -9,64 +9,66 @@ co2_data <- read.csv("https://raw.githubusercontent.com/owid/co2-data/master/owi
 
 # Making a new data frame with year 2021 only and removing unnecessary rows (non-countries such as European Unions, World, etc.)
 co2_data_2021 <- co2_data %>% 
-  select(country, year, co2_including_luc_growth_abs) %>% 
+  select(country, year, co2_including_luc_per_capita, ghg_per_capita) %>% 
   filter(year == 2021)
 co2_data_2021 <- co2_data_2021[-c(2, 3, 15, 16, 17, 46, 74, 75, 76, 77, 78, 79, 80, 103, 110, 135, 136, 152, 171, 172, 173, 174, 178, 179, 180, 218, 219, 249, 257),]
 
 
 # Answering: "What is the average value of my variable across all the counties (in the current year)?"
-avg_co2_growth <- co2_data_2021 %>% 
-  summarize(avg = mean(co2_including_luc_growth_abs, na.rm = TRUE))
+avg_co2_per_capita <- co2_data_2021 %>% 
+  summarize(avg = mean(co2_including_luc_per_capita, na.rm = TRUE))
 
 # Answering: "Where is my variable the highest / lowest?"
-max_co2_growth <- co2_data_2021 %>% 
-  filter(co2_including_luc_growth_abs == max(co2_including_luc_growth_abs, na.rm = TRUE)) %>% 
+max_co2_per_capita <- co2_data_2021 %>% 
+  filter(co2_including_luc_per_capita == max(co2_including_luc_per_capita, na.rm = TRUE)) %>% 
   pull(country)
 
-min_co2_growth <- co2_data_2021 %>% 
-  filter(co2_including_luc_growth_abs == min(co2_including_luc_growth_abs, na.rm = TRUE)) %>% 
+min_co2_per_capita <- co2_data_2021 %>% 
+  filter(co2_including_luc_per_capita == min(co2_including_luc_per_capita, na.rm = TRUE)) %>% 
   pull(country)
 
-# Answering: "How much has my variable change over the last 71 years (1950 - 2021)?"
+# Answering: "How much has my variable change over the last 29 years (1990 - 2019)?"
 change_over_years <- co2_data %>% 
-  select(country, year, co2_including_luc_growth_abs) %>% 
-  filter(year == 1950 | year == 2021) %>% 
+  select(country, year, ghg_per_capita) %>% 
+  filter(year == 1990 | year == 2019) %>% 
   group_by(year) %>% 
-  summarize(avg = mean(co2_including_luc_growth_abs, na.rm = TRUE)) %>% 
+  summarize(avg = mean(ghg_per_capita, na.rm = TRUE)) %>% 
   mutate(change = avg - lag(avg, n = 1L, default = NA))
 change_over_years <- change_over_years[2, 3]
 
 
-# ?**
-df <- co2_data %>% 
-  select(country, year, gdp, co2_growth_abs, co2_including_luc_growth_abs) %>% 
-  filter(year >= 1950) %>% 
+# Making a new data frame for data visualization (cutting down unnecessary rows after choosing necessary features and years)
+data_viz_df <- co2_data %>% 
+  select(country, year, co2_including_luc_per_capita, ghg_per_capita) %>% 
+  filter(year >= 1990) %>% 
   drop_na()
 
-# Define server logic required to draw ??
+# Define server logic required to draw a line chart
 server <- function(input, output) {
-  output$answer1 <- renderUI({answer1 <- avg_co2_growth})
-  output$answer2 <- renderUI({answer2 <- max_co2_growth})
-  output$answer3 <- renderUI({answer3 <- min_co2_growth})
+  output$answer1 <- renderUI({answer1 <- avg_co2_per_capita})
+  output$answer2 <- renderUI({answer2 <- max_co2_per_capita})
+  output$answer3 <- renderUI({answer3 <- min_co2_per_capita})
   output$answer4 <- renderUI({answer4 <- change_over_years})
   output$selectCountry <- renderUI({
-    selectInput("Country", "Choose a Country", unique(df$country))
+    selectInput("Country", "Choose a Country", unique(data_viz_df$country))
   })
-  #change
   output$selectFeature <- renderUI({
-    radioButtons("Feature", "Choose a feature:", list("co2_growth_abs", "co2_including_luc_growth_abs"), selected = "co2_growth_abs")
+    radioButtons("Feature", "Choose a feature:", list("co2_including_luc_per_capita", "ghg_per_capita"), selected = "co2_including_luc_per_capita")
   })
   chart <- reactive({
-    plotCountry <- df %>% 
+    plotCountry <- data_viz_df %>% 
       filter(country %in% input$Country)
     line_chart <- ggplot(data = plotCountry) +
       geom_line(aes_string(x = "year", y = input$Feature)) +
-      labs(title = "Education Level versus Fertility Rate in selected Continent",
+      labs(title = "Each country's production-based emissions of CO2 and Greenhouse gas emissions per capita",
+           caption = "This chart displays the trends of production-based emissions of CO2 and Greenhouse gas per capita for different countries ranging from 1990 to 2022.
+           By looking at the chart, we can discover that there is a slight decrease in both production-based emissions of CO2 and Greenhouse gas per capita in many countries in recent years,
+           despite some countries are still increasing."
            x = "Year",
-           y = "GDP")
+           y = input$Feature)
     ggplotly(line_chart)
   })
-  output$fertility_education_scatterplot <- renderPlotly({
+  output$total_co2_ghg_plot <- renderPlotly({
     chart()
   })
 }
