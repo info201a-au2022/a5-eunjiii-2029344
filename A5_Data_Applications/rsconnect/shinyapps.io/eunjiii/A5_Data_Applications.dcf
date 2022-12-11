@@ -5,9 +5,9 @@ account: eunjiii
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7853228
-bundleId: 6622442
+bundleId: 6622497
 url: https://eunjiii.shinyapps.io/A5_Data_Applications/
-when: 1670743261.15553
-lastSyncTime: 1670743261.15555
+when: 1670745270.81281
+lastSyncTime: 1670745270.81283
 asMultiple: FALSE
 asStatic: FALSE

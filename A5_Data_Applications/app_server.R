@@ -61,9 +61,6 @@ server <- function(input, output) {
     line_chart <- ggplot(data = plotCountry) +
       geom_line(aes_string(x = "year", y = input$Feature)) +
       labs(title = "Each country's production-based emissions of CO2 and Greenhouse gas emissions per capita",
-           caption = "This chart displays the trends of production-based emissions of CO2 and Greenhouse gas per capita for different countries ranging from 1990 to 2022.
-           By looking at the chart, we can discover that there is a slight decrease in both production-based emissions of CO2 and Greenhouse gas per capita in many countries in recent years,
-           despite some countries are still increasing."
            x = "Year",
            y = input$Feature)
     ggplotly(line_chart)
