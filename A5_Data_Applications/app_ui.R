@@ -1,6 +1,8 @@
 library(shiny)
-library(dplyr)
+library(tidyr) 
+library(plotly)
 library(ggplot2)
+library(tidyverse)
 library(shinythemes)
 
 intro_page <- tabPanel(
@@ -31,15 +33,11 @@ viz_page <- tabPanel(
   titlePanel(strong("Interactive Visualization")),
   sidebarLayout(
     sidebarPanel(
-      selectInput("select", label = h3("Select Countries"), 
-                  choices = list("United States" = 1, "United Kingdom" = 2, "China" = 3), 
-                  selected = 1),
-      
-      hr(),
-      fluidRow(column(3, verbatimTextOutput("value"))),
+      uiOutput("selectCountry"),
     ),
     mainPanel(
       h1("*change*"),
+      plotlyOutput("fertility_education_scatterplot"),
     )
   )
 )

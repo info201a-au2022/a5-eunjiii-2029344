@@ -8,8 +8,10 @@
 #
 
 library(shiny)
-library(dplyr)
+library(tidyr) 
+library(plotly)
 library(ggplot2)
+library(tidyverse)
 library(shinythemes)
 
 source("app_server.R")
