@@ -34,6 +34,8 @@ viz_page <- tabPanel(
   sidebarLayout(
     sidebarPanel(
       uiOutput("selectCountry"),
+      #change
+      uiOutput("selectFeature"),
     ),
     mainPanel(
       h1("*change*"),

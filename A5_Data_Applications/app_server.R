@@ -39,7 +39,7 @@ change_over_years <- change_over_years[2, 3]
 
 # ?**
 df <- co2_data %>% 
-  select(country, year, gdp, co2_including_luc_growth_abs) %>% 
+  select(country, year, gdp, co2_growth_abs, co2_including_luc_growth_abs) %>% 
   filter(year >= 1950) %>% 
   drop_na()
 
@@ -50,19 +50,23 @@ server <- function(input, output) {
   output$answer3 <- renderUI({answer3 <- min_co2_growth})
   output$answer4 <- renderUI({answer4 <- change_over_years})
   output$selectCountry <- renderUI({
-    selectInput("Country", "Choose a Country", choices = unique(df$country))
+    selectInput("Country", "Choose a Country", unique(df$country))
   })
-  plot <- reactive({
+  #change
+  output$selectFeature <- renderUI({
+    radioButtons("Feature", "Choose a feature:", list("co2_growth_abs", "co2_including_luc_growth_abs"), selected = "co2_growth_abs")
+  })
+  chart <- reactive({
     plotCountry <- df %>% 
       filter(country %in% input$Country)
-    scatterplot <- ggplot(data = plotCountry) +
-      geom_point(aes(x = gdp, y = co2_including_luc_growth_abs)) +
+    line_chart <- ggplot(data = plotCountry) +
+      geom_line(aes_string(x = "year", y = input$Feature)) +
       labs(title = "Education Level versus Fertility Rate in selected Continent",
-           x = "GDP",
-           y = "Fertility Rate")
-    ggplotly(scatterplot)
+           x = "Year",
+           y = "GDP")
+    ggplotly(line_chart)
   })
   output$fertility_education_scatterplot <- renderPlotly({
-    plot()
+    chart()
   })
 }
